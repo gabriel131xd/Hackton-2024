@@ -1,0 +1,70 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
+
+public class Exercicio2Avancado {
+    public static List<int[]> encontrarMenorDiferenca(int[] arr, boolean allowDuplicates, boolean sortedPairs, boolean uniquePairs) {
+        Arrays.sort(arr);
+        int menorDiferenca = Integer.MAX_VALUE;
+        List<int[]> pares = new ArrayList<>();
+        Set<String> vistos = new HashSet<>();  // Para garantir a unicidade dos pares
+        for (int i = 0; i < arr.length - 1; i++) {
+            int diferenca = arr[i + 1] - arr[i];
+            if (diferenca < menorDiferenca) {
+                menorDiferenca = diferenca;
+                pares.clear();
+                if (verificarPar(arr[i], arr[i + 1], allowDuplicates, uniquePairs, vistos)) {
+                    pares.add(criarPar(arr[i], arr[i + 1], sortedPairs));
+                }
+            } else if (diferenca == menorDiferenca) {
+                if (verificarPar(arr[i], arr[i + 1], allowDuplicates, uniquePairs, vistos)) {
+                    pares.add(criarPar(arr[i], arr[i + 1], sortedPairs));
+                }
+            }
+        }
+        return pares;
+    }
+    private static boolean verificarPar(int a, int b, boolean allowDuplicates, boolean uniquePairs, Set<String> vistos) {
+        if (!allowDuplicates && a == b) {
+            return false;
+        }
+        String par = a + "," + b;
+        String parInvertido = b + "," + a;
+        if (uniquePairs && (vistos.contains(par) || vistos.contains(parInvertido))) {
+            return false;
+        }
+        vistos.add(par);
+        vistos.add(parInvertido);
+        return true;
+    }
+    private static int[] criarPar(int a, int b, boolean sortedPairs) {
+        if (sortedPairs && a > b) {
+            return new int[]{b, a};
+        }
+        return new int[]{a, b};
+    }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Digite a quantidade de números:");
+        int n = scanner.nextInt();
+        int[] numeros = new int[n];
+        System.out.println("Digite os números:");
+        for (int i = 0; i < n; i++) {
+            numeros[i] = scanner.nextInt();
+        }
+        System.out.println("Permitir duplicatas? (true/false):");
+        boolean allowDuplicates = scanner.nextBoolean();
+        System.out.println("Ordenar pares? (true/false):");
+        boolean sortedPairs = scanner.nextBoolean();
+        System.out.println("Apenas pares únicos? (true/false):");
+        boolean uniquePairs = scanner.nextBoolean();
+        List<int[]> resultado = encontrarMenorDiferenca(numeros, allowDuplicates, sortedPairs, uniquePairs);
+        System.out.println("Pares com a menor diferença:");
+        for (int[] par : resultado) {
+            System.out.println(Arrays.toString(par));
+        }
+    }
+}

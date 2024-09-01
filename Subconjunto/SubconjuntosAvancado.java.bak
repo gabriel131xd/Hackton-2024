@@ -1,0 +1,65 @@
+import java.util.*;
+
+public class SubconjuntosAvancado {
+
+    public static List<List<Integer>> gerarSubconjuntos(int[] nums, int maxSize, int minSize, boolean distinctOnly, boolean sortSubsets) {
+        List<List<Integer>> subconjuntos = new ArrayList<>();
+        
+        // Ordena o array se sortSubsets for verdadeiro para facilitar a geração de subconjuntos ordenados
+        if (sortSubsets) {
+            Arrays.sort(nums);
+        }
+        
+        // Gera todos os subconjuntos
+        gerarSubconjuntosHelper(nums, 0, new ArrayList<>(), subconjuntos, maxSize, minSize, distinctOnly);
+        
+        // Ordena os subconjuntos se sortSubsets for verdadeiro
+        if (sortSubsets) {
+            subconjuntos.sort((a, b) -> {
+                if (a.size() != b.size()) {
+                    return Integer.compare(a.size(), b.size());
+                }
+                for (int i = 0; i < a.size(); i++) {
+                    if (!a.get(i).equals(b.get(i))) {
+                        return Integer.compare(a.get(i), b.get(i));
+                    }
+                }
+                return 0;
+            });
+        }
+        
+        return subconjuntos;
+    }
+
+    private static void gerarSubconjuntosHelper(int[] nums, int index, List<Integer> subconjuntoAtual, List<List<Integer>> subconjuntos, int maxSize, int minSize, boolean distinctOnly) {
+        // Adiciona o subconjunto atual a lista se ele cumprir os requisitos de tamanho
+        if (subconjuntoAtual.size() >= minSize && (maxSize == 0 || subconjuntoAtual.size() <= maxSize)) {
+            // Verifica duplicatas se distinctOnly for verdadeiro
+            if (!distinctOnly || new HashSet<>(subconjuntoAtual).size() == subconjuntoAtual.size()) {
+                subconjuntos.add(new ArrayList<>(subconjuntoAtual));
+            }
+        }
+        
+        // Gera novos subconjuntos incluindo os elementos restantes
+        for (int i = index; i < nums.length; i++) {
+            subconjuntoAtual.add(nums[i]);
+            gerarSubconjuntosHelper(nums, i + 1, subconjuntoAtual, subconjuntos, maxSize, minSize, distinctOnly);
+            subconjuntoAtual.remove(subconjuntoAtual.size() - 1);
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] numeros = {1, 2, 2, 3};
+        int maxSize = 3; // Limite de tamanho maximo
+        int minSize = 1; // Tamanho minimo
+        boolean distinctOnly = true; // Subconjuntos sem duplicatas
+        boolean sortSubsets = true; // Subconjuntos ordenados
+
+        List<List<Integer>> resultado = gerarSubconjuntos(numeros, maxSize, minSize, distinctOnly, sortSubsets);
+
+        System.out.println("Subconjuntos:");
+        for (List<Integer> subconjunto : resultado) {
+            System.out.println(subconjunto);
+        }
+    }
+}
