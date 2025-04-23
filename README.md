@@ -5,9 +5,7 @@ Repositório com os desafios de lógica de programação propostos no Hackathon 
 ☕ Importação obrigatória para leitura de dados
 
 Todos os exercícios que utilizam entrada do usuário usam o Scanner.
-
 Sempre utilize a importação padrão no início do código Java:
-
 import java.util.Scanner;
 
 🚀 Execução
