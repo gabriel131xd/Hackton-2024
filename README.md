@@ -1,5 +1,5 @@
 # Hackton-2024
-Desafio 0
+
 Repositório com os desafios de lógica de programação propostos no Hackathon de 2024. Todos os exercícios foram desenvolvidos em Java utilizando o editor EditPlus.
 
 ☕ Importação obrigatória para leitura de dados
